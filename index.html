@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-192x192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PQC Search</title>
+    <meta name="theme-color" content="#f28c38">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- EmailJS Script -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function(){
+            emailjs.init("YOUR_EMAILJS_USER_ID"); // Replace with your EmailJS User ID
+        })();
+    </script>
+   <style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: #ffffff;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        color: #333333;
+        position: relative; /* Needed for absolute positioning of logo */
+    }
+
+    .logo {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 100px; /* Adjust size as needed */
+        height: auto;
+        z-index: 1000; /* Ensures logo stays above other content */
+    }
+
+    .login-container, .container {
+        background: #ffffff;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        position: relative; /* Ensures content aligns properly */
+        z-index: 1; /* Below logo */
+    }
+
+    .container {
+        max-width: 600px;
+    }
+
+    .login-title {
+        margin-bottom: 30px;
+        font-size: 24px;
+        font-weight: 600;
+        color: #333333;
+    }
+
+    .login-form input {
+        width: 100%;
+        padding: 15px;
+        margin: 10px 0;
+        border: 1px solid #dddddd;
+        border-radius: 5px;
+        background: #ffffff;
+        color: #333333;
+        font-size: 16px;
+        box-sizing: border-box;
+        position: relative;
+    }
+
+    .login-form input::placeholder {
+        color: #888888;
+    }
+
+    .input-with-icon {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .input-with-icon input {
+        padding-left: 40px;
+    }
+
+    .input-with-icon img {
+        position: absolute;
+        left: 15px;
+        width: 20px;
+        height: 20px;
+    }
+
+    .login-options {
+        display: flex;
+        justify-content: flex-start; /* Left-align by default */
+        align-items: center;
+        margin: 20px 0;
+        font-size: 14px;
+        color: #666666;
+    }
+
+    .login-options label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .login-btn {
+        width: 100%;
+        padding: 15px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 5px;
+        background: #f28c38;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .login-btn:hover {
+        background: #e07b2a;
+    }
+
+    .search-bar {
+        position: relative;
+        margin: 20px 0;
+    }
+
+    .search-bar input {
+        width: 100%;
+        padding: 15px;
+        border: 1px solid #dddddd;
+        border-radius: 5px;
+        background: #ffffff;
+        color: #333333;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+
+    .search-bar input::placeholder {
+        color: #888888;
+    }
+
+    .search-bar button {
+        width: 100%;
+        padding: 15px;
+        margin-top: 10px;
+        border: none;
+        border-radius: 5px;
+        background: #f28c38;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .search-bar button:hover {
+        background: #e07b2a;
+    }
+
+    .result {
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 5px;
+        margin-top: 20px;
+        text-align: left;
+        display: none;
+        border: 1px solid #dddddd;
+    }
+
+    .result p {
+        margin: 10px 0;
+        font-size: 16px;
+        color: #333333;
+    }
+
+    .result strong {
+        color: #f28c38;
+    }
+
+    @media (max-width: 480px) {
+        .login-container, .container {
+            padding: 15px;
+            margin: 5px;
+            text-align: left; /* Override centering */
+        }
+        
+        .login-title {
+            font-size: 18px;
+        }
+        
+        .logo {
+            width: 70px;
+            top: 10px;
+            right: 10px;
+        }
+        
+        .login-options {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin: 10px 0;
+            width: 100%;
+            padding-left: 0;
+        }
+        
+        .login-options label {
+            white-space: nowrap;
+            overflow: visible;
+            font-size: 14px;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .login-options input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        
+        .login-form {
+            min-width: 280px;
+        }
+        
+        .login-btn {
+            width: 100%;
+            margin-top: 10px;
+        }
+    }
+</style>
+</head>
+<body>
+    <img src="your-logo.png" alt="Company Logo" class="logo"> <!-- Replace with your logo URL -->
+    <div class="login-container" id="loginContainer">
+        <h1 class="login-title">Member Login</h1>
+        <form class="login-form" onsubmit="return false;">
+            <div class="input-with-icon">
+                <img src="https://img.icons8.com/ios-filled/20/000000/user.png" alt="User Icon" style="filter: hue-rotate(30deg);">
+                <input type="email" id="emailInput" placeholder="Username" autocomplete="email" required>
+            </div>
+            <div class="input-with-icon">
+                <img src="https://img.icons8.com/ios-filled/20/000000/lock.png" alt="Lock Icon" style="filter: hue-rotate(30deg);">
+                <input type="password" id="passwordInput" placeholder="Password" autocomplete="current-password" required>
+            </div>
+            <div class="login-options">
+                <label><input type="checkbox" id="rememberMe"> Remember Me</label>
+            </div>
+            <button type="button" class="login-btn" onclick="attemptLogin()">LOGIN</button>
+        </form>
+        <p class="error-message" id="loginError"></p>
+        <p class="success-message" id="loginSuccess"></p>
+    </div>
+
+    <div class="container" id="searchContainer" style="display: none;">
+        <h1>Employee Search</h1>
+        <div class="search-bar">
+            <input type="text" id="cnicInput" placeholder="Enter CNIC without dashes (e.g. 1234567890123)" required>
+            <button onclick="searchEmployee()">Search</button>
+        </div>
+        <div class="result" id="result">
+            <p><strong>PQC Name:</strong> <span id="pqcName"></span></p>
+            <p><strong>Employee Name:</strong> <span id="dynamicValue"></span></p>
+            <p><strong>Designation:</strong> <span id="designation"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let app, db, employees = [];
+        const DEBUG_MODE = false;
+        const VALID_CREDENTIALS = {
+            "fiza.shah@ke.com.pk": "Hseqd123",
+            "muzzamil.farooq@ke.com.pk": "Hseqd123",
+            "hasnain.abdul@ke.com.pk": "Hseqd123",
+            "kashif.baig@ke.com.pk": "Hseqd123",
+            "faraz.rehman@ke.com.pk": "Hseqd123",
+            "naseer.fareed@ke.com.pk": "Hseqd123",
+            "muhmmad.nabeel@ke.com.pk": "Hseqd123",
+            "s.asadhasan@ke.com.pk": "Hseqd123",
+            "ali.arman@ke.com.pk": "Hseqd123",
+            "faizan.zafar@ke.com.pk": "Hseqd123",
+            "haider.assadullah@ke.com.pk": "Hseqd123",
+            "m.bilalsualaheen@ke.com.pk": "Hseqd123",
+            "nabeel.mehmood@ke.com.pk": "Hseqd123",
+            "saqib.mehmood@ke.com.pk": "Hseqd123",
+            "layaiq.ahmed@ke.com.pk": "Hseqd123",
+            "shahid.ghaffar@ke.com.pk": "Hseqd123",
+            "umair.butt@ke.com.pk": "Hseqd123",
+            "m.waleedsaeed@ke.com.pk": "Hseqd123",
+            "ahsan.shahabuddin@ke.com.pk": "Hseqd123",
+            "ahmed.shaharyar@ke.com.pk": "Hseqd123",
+            "alam.nadeem@ke.com.pk": "Hseqd123",
+            "atlaf.ainul@ke.com.pk": "Hseqd123",
+            "taha.chishti@ke.com.pk": "Hseqd123",
+            "hamir.salam@ke.com.pk": "Hseqd123",
+            "m.mubasit@ke.com.pk": "Hseqd123",
+            "ahmad.akhtar@ke.com.pk": "Hseqd123",
+            "noorullah.shaikh@ke.com.pk": "Hseqd123",
+            "hassan.asharaf@ke.com.pk": "Hseqd123",
+            "hamid.raza@ke.com.pk": "Hseqd123",
+            "ismail.dawa@ke.com.pk": "Hseqd123",
+            "tariq.mohiuddin@ke.com.pk": "Hseqd123",
+            "muhammad.faheem@ke.com.pk": "Hseqd123",
+            "mohammad.hassaan@ke.com.pk": "Hseqd123",
+            "ashraf.sohail@ke.com.pk": "Hseqd123",
+            "sadan.siddiqui@ke.com.pk": "Hseqd123",
+            "hazrat.syed@ke.com.pk": "Hseqd123",
+            "mumer.khan@ke.com.pk": "Hseqd123",
+            "hunza.yousuf@ke.com.pk":"Hseqd123",
+            "rahila.zareen@ke.com.pk": "Hseqd123",
+            "farhatullah.khan@ke.com.pk": "Hseqd123",
+            "ansar.hayat@ke.com.pk": "Hseqd123",
+            "khan.muhammad@ke.com.pk": "Hseqd123",
+            "muhammad.nabeel@ke.com.pk": "Hseqd123",
+            "mirza.moheen@ke.com.pk": "Hseqd123",
+            "zulqarnain.raza@ke.com.pk": "Hseqd123",
+            "m.ahtisham@ke.com.pk": "Hseqd123",
+            "m.shoaibjamil@ke.com.pk": "Hseqd123",
+            "zain.ghalib@ke.com.pk": "Hseqd123",
+            "kashif.mustafashah@ke.com.pk": "Hseqd123",
+            "azhar.mazhar@ke.com.pk": "Hseqd123",
+            "ghulam.sarwarali@ke.com.pk": "Hseqd123",
+            "asim.ziauddin@ke.com.pk": "Hseqd123",
+            "raheem.noor@ke.com.pk": "Hseqd123",
+            "hassan.aabbas@ke.com.pk": "Hseqd123",
+            "atif.azizkhan@ke.com.pk": "Hseqd123",
+            "najam.zaman@ke.com.pk": "Hseqd123",
+            "sajid.younus@ke.com.pk": "Hseqd123",
+            "m.kashifali@ke.com.pk": "Hseqd123",
+            "zeeshanahmed.khan@ke.com.pk ": "Hseqd123",
+            "tariq.ghori@ke.com.pk": "Hseqd123",
+            "faiza.sanam@ke.com.pk": "Hseqd123",
+            "adnan.shaikh@ke.com.pk": "Hseqd123",
+            "hira.rehman@ke.com.pk": "Hseqd123", 
+            "raza.mohsin@ke.com.pk": "Hseqd123", 
+            "mansoor.chingini@ke.com.pk": "Hseqd123",
+            "shahid.razak@ke.com.pk": "Hseqd123",
+            "iqbalzafar.shafi@ke.com.pk": "Hseqd123"         
+        };
+
+        // Initialize Firebase
+        async function initializeFirebase() {
+            const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js");
+            const { getFirestore, collection, getDocs, query, where } = await import("https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js");
+            
+            const firebaseConfig = {
+                apiKey: "AIzaSyA7P6Od4bK93Jlf0rMoZUeePdgQC6SKyLU",
+                authDomain: "ke-employees.firebaseapp.com",
+                projectId: "ke-employees",
+                storageBucket: "ke-employees.firebasestorage.app",
+                messagingSenderId: "858920129718",
+                appId: "1:858920129718:web:160c909a45e2e5ac0b4217"
+            };
+
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            
+            // Store Firebase functions globally
+            window.firestoreFunctions = { collection, getDocs, query, where };
+        }
+
+        // Function to fetch employees
+        async function getEmployees() {
+            try {
+                const { collection, getDocs } = window.firestoreFunctions;
+                const list = await getDocs(collection(db, "employees"));
+                employees = list.docs.map(doc => doc.data());
+                console.log("Got employees:", employees.length, "data:", employees);
+            } catch (error) {
+                console.error("Error fetching employees:", error);
+                alert("Couldn't get data. Check the console.");
+            }
+        }
+
+        function debugLog(message, data = null) {
+            if (DEBUG_MODE) {
+                console.log(message, data);
+            }
+        }
+
+        function clearMessages() {
+            document.getElementById('loginError').textContent = '';
+            document.getElementById('loginSuccess').textContent = '';
+        }
+
+        function attemptLogin() {
+            clearMessages();
+            
+            const emailInput = document.getElementById('emailInput');
+            const passwordInput = document.getElementById('passwordInput');
+            const errorDiv = document.getElementById('loginError');
+            const successDiv = document.getElementById('loginSuccess');
+            
+            const email = emailInput.value.trim().toLowerCase();
+            const password = passwordInput.value;
+            
+            debugLog('Login attempt:', { email, passwordLength: password.length });
+            
+            if (!email) {
+                errorDiv.textContent = 'Please enter your username.';
+                emailInput.focus();
+                return;
+            }
+            
+            if (!password) {
+                errorDiv.textContent = 'Please enter your password.';
+                passwordInput.focus();
+                return;
+            }
+            
+            if (!email.includes('@ke.com.pk')) {
+                errorDiv.textContent = 'Please use a valid @ke.com.pk username.';
+                emailInput.focus();
+                return;
+            }
+            
+            debugLog('Checking credentials for:', email);
+            debugLog('Available emails:', Object.keys(VALID_CREDENTIALS));
+            
+            if (VALID_CREDENTIALS[email] && VALID_CREDENTIALS[email] === password) {
+                debugLog('Login successful');
+                successDiv.textContent = 'Login successful! Redirecting...';
+                
+                setTimeout(() => {
+                    document.getElementById('loginContainer').style.display = 'none';
+                    document.getElementById('searchContainer').style.display = 'block';
+                    getEmployees();
+                }, 1000);
+            } else {
+                debugLog('Login failed');
+                errorDiv.textContent = 'Invalid username or password. Please check your credentials.';
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        }
+
+        async function searchEmployee() {
+            const input = document.getElementById('cnicInput').value.trim();
+            const resultDiv = document.getElementById('result');
+            const dynamicValue = document.getElementById('dynamicValue');
+            let employee = null;
+
+            if (!input) {
+                alert('Please enter a CNIC number');
+                return;
+            }
+
+            const cleanInput = input.replace(/-/g, '');
+            const isCnic = cleanInput.match(/^\d{13}$/);
+
+            if (!isCnic) {
+                alert('Please enter a valid 13-digit CNIC number without dashes');
+                return;
+            }
+
+            try {
+                const { collection, getDocs, query, where } = window.firestoreFunctions;
+                const q = query(collection(db, "employees"), where("cnic", "==", cleanInput));
+                
+                const querySnapshot = await getDocs(q);
+                if (!querySnapshot.empty) {
+                    employee = querySnapshot.docs[0].data();
+                }
+            } catch (error) {
+                console.error("Search error:", error);
+                alert("Search failed. Please try again.");
+                return;
+            }
+
+            if (employee) {
+                document.getElementById('pqcName').textContent = employee.pqcName || 'N/A';
+                document.getElementById('designation').textContent = employee.designation || 'N/A';
+                document.getElementById('dynamicValue').textContent = employee.employeeName || 'N/A';
+                resultDiv.style.display = 'block';
+            } else {
+                alert('No employee found with the provided CNIC!');
+                resultDiv.style.display = 'none';
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Initialize Firebase first
+            await initializeFirebase();
+            
+            const emailInput = document.getElementById('emailInput');
+            const passwordInput = document.getElementById('passwordInput');
+            
+            // Add Enter key support for login
+            [emailInput, passwordInput].forEach(input => {
+                input.addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        attemptLogin();
+                    }
+                });
+            });
+            
+            // Focus on email input
+            emailInput.focus();
+            
+            // Add Enter key support for search
+            document.getElementById('cnicInput').addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    searchEmployee();
+                }
+            });
+            
+            // Load employees
+            getEmployees();
+        });
+    </script>
+</body>
+</html>
